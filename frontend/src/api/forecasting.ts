@@ -22,3 +22,16 @@ export const getProductVelocity = async () => {
   const response = await apiClient.get('/inventory/product-velocity/');
   return response.data;
 };
+
+export const recommendShelf = async (
+  requiredVolume: number,
+  warehouseId?: number,
+  strategy: 'BEST_FIT' | 'WORST_FIT' = 'BEST_FIT'
+) => {
+  const response = await apiClient.post('/inventory/shelf-recommendation/', {
+    required_volume: requiredVolume,
+    warehouse_id: warehouseId,
+    strategy,
+  });
+  return response.data;
+};
