@@ -29,7 +29,7 @@ class FullWarehouseFlowTest(TestCase):
             location='Chennai',
             total_capacity=1000.0,
             available_capacity=1000.0,
-            manager_name='admin_test',
+            
         )
         self.zone = Zone.objects.create(
             warehouse=self.warehouse,

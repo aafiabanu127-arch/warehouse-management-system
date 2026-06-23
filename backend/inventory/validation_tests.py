@@ -22,7 +22,7 @@ class ValidationTests(APITestCase):
 
         warehouse = Warehouse.objects.create(
             name='Test Warehouse', location='Test City', total_capacity=100.0,
-            available_capacity=100.0, manager_name='Test Manager'
+            available_capacity=100.0
         )
         zone = Zone.objects.create(warehouse=warehouse, name='Zone A', capacity=50.0)
         rack = Rack.objects.create(zone=zone, rack_code='RACK-VAL-001', capacity=25.0)

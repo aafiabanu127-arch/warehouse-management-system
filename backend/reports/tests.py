@@ -22,11 +22,11 @@ class ReportsTests(APITestCase):
         )
         wh = Warehouse.objects.create(
             name="RepWH", location="Chennai", total_capacity=1000,
-            available_capacity=800, manager_name="Ravi"
+            available_capacity=800
         )
         Warehouse.objects.create(
             name="ZeroWH", location="Delhi", total_capacity=0,
-            available_capacity=0, manager_name="Zero"
+            available_capacity=0
         )
         zone = Zone.objects.create(warehouse=wh, name="RZ1", capacity=500)
         rack = Rack.objects.create(zone=zone, rack_code="RR1", capacity=100)
@@ -157,7 +157,7 @@ class ReportsTests(APITestCase):
         self.assertIn("StrTest", str(report))
 
     def test_generate_report_exception_path(self):
-        """Patch Inventory.objects to raise — hits except block lines 68-71."""
+        """Patch Inventory.objects to raise - hits except block lines 68-71."""
         with patch("reports.views.Inventory.objects") as mock_inv:
             mock_inv.values.side_effect = Exception("forced error")
             resp = self.client.post("/api/reports/reports/",
@@ -179,7 +179,7 @@ class WarehouseTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {resp.data["access"]}')
         self.warehouse = Warehouse.objects.create(
             name="Test WH", location="Chennai", total_capacity=1000,
-            available_capacity=800, manager_name="Kumar"
+            available_capacity=800
         )
 
     def test_list_warehouses(self):
@@ -189,7 +189,7 @@ class WarehouseTests(APITestCase):
     def test_create_warehouse(self):
         resp = self.client.post("/api/warehouses/warehouses/", {
             "name": "New WH", "location": "Mumbai",
-            "total_capacity": 500, "available_capacity": 500, "manager_name": "Singh"
+            "total_capacity": 500, "available_capacity": 500
         })
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
@@ -217,7 +217,7 @@ class OptimizationTests(APITestCase):
             name="OptProduct", sku="OPT001", category=self.category,
             unit_volume=1.0, unit_weight=0.5
         )
-        wh = Warehouse.objects.create(name="OWH", location="Delhi", total_capacity=1000, available_capacity=1000, manager_name="Raj")
+        wh = Warehouse.objects.create(name="OWH", location="Delhi", total_capacity=1000, available_capacity=1000)
         zone = Zone.objects.create(warehouse=wh, name="Z1", capacity=500)
         rack = Rack.objects.create(zone=zone, rack_code="OR1", capacity=100)
         self.shelf = Shelf.objects.create(rack=rack, shelf_code="OS1", capacity=50)
@@ -267,3 +267,4 @@ class OptimizationTests(APITestCase):
             "product": self.product.id, "quantity": 5, "movement_type": "OUT", "notes": "Dispatch"
         })
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+

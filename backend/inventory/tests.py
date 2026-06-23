@@ -37,7 +37,7 @@ class InventoryBaseTest(APITestCase):
         )
         self.wh = Warehouse.objects.create(
             name="TestWH", location="Chennai", total_capacity=1000,
-            available_capacity=900, manager_name="Raj"
+            available_capacity=900
         )
         self.zone = Zone.objects.create(warehouse=self.wh, name="Z1", capacity=500)
         self.rack = Rack.objects.create(zone=self.zone, rack_code="R1", capacity=200)
@@ -137,7 +137,7 @@ class ShelfRecommendationTests(InventoryBaseTest):
         """Hits return None in both first_fit and best_fit warehouse_id filter."""
         other_wh = Warehouse.objects.create(
             name="EmptyWH", location="Pune", total_capacity=100,
-            available_capacity=100, manager_name="Nobody"
+            available_capacity=100
         )
         for strategy in ["FIRST_FIT", "BEST_FIT"]:
             resp = self.client.post("/api/inventory/shelf-recommendation/",
@@ -188,7 +188,7 @@ class ForecastingTests(InventoryBaseTest):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_forecast_decreasing_trend_hits_summary_branch(self):
-        """Hits forecasting.py lines 130,132 — decreasing branch in get_forecasting_summary."""
+        """Hits forecasting.py lines 130,132 - decreasing branch in get_forecasting_summary."""
         p = Product.objects.create(
             name="Declining", sku="DEC001", category=self.category,
             unit_volume=1.0, unit_weight=1.0
@@ -217,11 +217,11 @@ class ABCClassificationTests(InventoryBaseTest):
         self.assertIn("TST001", classes)
         self.assertIn("TST002", classes)
         self.assertIn("TST003", classes)
-        # product2 has zero OUT — must be C via zero-movement branch
+        # product2 has zero OUT � must be C via zero-movement branch
         self.assertEqual(classes.get("TST002"), "C")
-        # product1 has massive OUT (800 total) — must be A
+        # product1 has massive OUT (800 total) � must be A
         self.assertEqual(classes.get("TST001"), "A")
-        # product3 has tiny OUT (1 unit) — B or C cumulative branch
+        # product3 has tiny OUT (1 unit) � B or C cumulative branch
         self.assertIn(classes.get("TST003"), ["B", "C"])
 
 
@@ -273,7 +273,7 @@ class TransferRequestTests(InventoryBaseTest):
     def test_staff_sees_own_transfers_only(self):
         """Hits non-admin get_queryset branch (views.py line 108/111)."""
         t = self._create_transfer()
-        # Staff user only sees their own — this exercises the filter branch
+        # Staff user only sees their own � this exercises the filter branch
         resp2 = self.client.post("/api/token/", {"username": "inv_staff", "password": "staff123"})
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {resp2.data["access"]}')
         # Create a transfer owned by staff
@@ -464,3 +464,4 @@ class CoverageBoostTests(InventoryBaseTest):
             result = get_forecasting_summary()
         self.assertEqual(len(result['products_with_increasing_demand']), 1)
         self.assertEqual(len(result['products_with_decreasing_demand']), 1)
+

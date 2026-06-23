@@ -67,3 +67,30 @@ See TEST_REPORT.md for full details.
 
 ## Deployment
 Live on Render.com. See DEPLOYMENT_GUIDE.md for full deployment steps.
+---
+
+## 🤖 AI Integration & Advanced Features
+
+### AI Demand Forecasting
+- Located in `backend/inventory/forecasting.py`
+- Uses **NumPy linear regression** on historical stock movement data
+- Predicts future demand per product and flags restocking needs
+- Exposed via `/api/inventory/forecasting/` endpoint
+- Frontend: `Analytics.tsx` displays forecast charts
+
+### Automation
+- `backend/inventory/management/commands/check_low_stock.py` — auto-runs low stock checks and triggers notifications
+- `backend/inventory/management/commands/run_forecasting.py` — scheduled command to regenerate forecasts
+- Notifications are auto-created on stock threshold breach
+
+### Analytics & Reporting
+- ABC Classification of products by movement velocity (`optimization.py`)
+- KPI dashboard with real-time inventory value, warehouse utilization, low stock count
+- Reports exportable in **CSV, Excel (.xlsx), and PDF** formats
+
+### Scalability
+- Stateless JWT authentication — horizontally scalable
+- PostgreSQL on Railway with connection pooling
+- WhiteNoise for static file serving without extra infra
+- Pagination on all list endpoints prevents large payload issues
+- Modular Django app structure — each domain (inventory, warehouses, reports, notifications) is independently maintainable
