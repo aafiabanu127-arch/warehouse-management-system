@@ -1,0 +1,25 @@
+.cart-item{
+    display:flex;
+    align-items: center;
+    gap:16px;
+    background-color:aliceblue;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0,0.06);
+    transition: tranform o.2s ease,box-shadow  0.2s ease;
+
+}
+.cart-item:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+
+}
+.cart-item-details{
+    display:flex;
+    flex-direction:column;
+}
+.cart-item-details h2{
+    margin:0;
+    font-size:7px;
+
+}
